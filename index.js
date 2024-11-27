@@ -20,10 +20,10 @@ const createTable = async() => {
         }
 }
 
-let tasks = [
-    { id: 1, description: 'Buy groceries', status: 'incomplete' },
-    { id: 2, description: 'Read a book', status: 'complete' },
-];
+// let tasks = [
+//     { id: 1, description: 'Buy groceries', status: 'incomplete' },
+//     { id: 2, description: 'Read a book', status: 'complete' },
+// ];
 
 // GET /tasks - Get all tasks
 app.get('/tasks', async(req, res) => {
@@ -40,16 +40,15 @@ app.get('/tasks', async(req, res) => {
 
 // POST /tasks - Add a new task
 app.post('/tasks', async (request, response) => {
-    const { id, description, status } = request.body;
-    if (!id || !description || !status) {
-        return response.status(400).json({ error: 'All fields (id, description, status) are required' });
+    const { description, status } = request.body; // removed id because the database generates one
+    if (!description || !status) {
+        return response.status(400).json({ error: 'All fields (description, status) are required' });
     }
     try{
         const result = await pool.query (
             'INSERT INTO tasks (description, status) VALUES ($1, $2) RETURNING *'
             [description, status]
         );
-    tasks.push({ id, description, status });
     response.status(201).json({ message: 'Task added successfully' });
     }
     catch(error) {
@@ -81,10 +80,6 @@ app.put('/tasks/:id', async (request, response) => {
         response.status(500).send('server error. please retry.')
     }
 
-    // const task = tasks.find(t => t.id === taskId);
-    // if(task){
-    //     task.status = status;
-    // }
 });
 
 // DELETE /tasks/:id - Delete a task
@@ -106,8 +101,6 @@ app.delete('/tasks/:id', async (request, response) => {
         response.status(500).send('server error. please retry.')
     }
 
-    // const initialLength = tasks.length;
-    // tasks = tasks.filter(t => t.id !== taskId); 
     
 });
 
