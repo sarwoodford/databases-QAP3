@@ -1,8 +1,24 @@
 const express = require('express');
 const app = express();
 const PORT = 3000;
+const pool = require('./db');
 
 app.use(express.json());
+
+// create task table if it doesn't already exist
+const createTable = async() => {
+    try{
+        await pool.query(`CREATE TABLE IF NOT EXISTS tasks(
+                            id SERIAL PRIMARY KEY,
+                            description VARCHAR(250) NOT NULL,
+                            status VARCHAR(100) NOT NULL
+                            );`);
+        console.log("tasks table created successfully.");
+        }
+        catch(error){
+            console.error('error occured. table could not be created.')
+        }
+}
 
 let tasks = [
     { id: 1, description: 'Buy groceries', status: 'incomplete' },
