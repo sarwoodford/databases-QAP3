@@ -3,7 +3,15 @@ const app = express();
 const PORT = 3000;
 const pool = require('./db');
 
+const mongoose = require('mongoose');
+
 app.use(express.json());
+
+const MONGO_URI = 'mongodb+srv://sarawoodford6:SaraMongo@qap3.gb0es.mongodb.net/';
+
+mongoose.connect(MONGO_URI)
+    .then(() => app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`)))
+    .catch(err => console.error("Error connecting to MongoDB:", err));
 
 // create task table if it doesn't already exist
 const createTable = async() => {
