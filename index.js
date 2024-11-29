@@ -22,11 +22,8 @@ const createTable = async() => {
         }
 }
 
+createTable()
 
-// let tasks = [
-//     { id: 1, description: 'Buy groceries', status: 'incomplete' },
-//     { id: 2, description: 'Read a book', status: 'complete' },
-// ];
 
 // GET /tasks - Get all tasks
 
