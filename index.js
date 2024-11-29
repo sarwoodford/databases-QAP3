@@ -143,6 +143,56 @@ const insertBooks = async () => {
     }
 }
 
+async function getBookTitles() {
+    const titles = await Book.find({}, { title: 1, _id: 0});
+
+    if (titles.length === 0) {
+        console.log("No Books Available.")
+    }
+    else {
+        console.log("All Book Titles: ");
+        titles.forEach((book) => {
+            console.log(book.title);
+        });
+    }
+}
+
+async function findBooksByAuthor() {
+    const books = await Book.find({ author: authorName });
+
+    if(books.length === 0) {
+        console.log(`No Books Found By ${authorName}`);
+    }
+    else{
+        console.log(`Books Written by ${authorName}: `)
+        books.forEach((book) => {
+            console.log(`Title: ${book.title} - Genre: ${book.genre} - Year: ${book.year}`);
+        });
+    }
+}
+
+async function updateBookGenre() {
+    const result = await Book.updateOne({ title }, { set: { genre : updatedGenre }});
+
+    if(result.matchedCount === 0) {
+        console.log(`Book Not Found.`);
+    }
+    else {
+        console.log(`Updated ${book.title} Genre to ${updatedGenre}`);
+    }
+}
+
+async function deleteBook(title) {
+    const result = await Book.deleteOne({ title });
+
+    if(result.deletedCount > 0) {
+        console.log(`Book "${result.title}" deleted`)
+    }
+    else{
+        console.log(`Book Not Found.`)
+    }
+}
+
 
 
 app.listen(PORT, () => {
