@@ -13,6 +13,17 @@ mongoose.connect(MONGO_URI)
     .then(() => app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`)))
     .catch(err => console.error("Error connecting to MongoDB:", err));
 
+// establish schema
+
+const bookSchema = new mongoose.Scheme({
+    title: { type: String, required: true, trim: true },
+    author: { type: String, required: true, trim: true},
+    genre: { type: String, required: true, trim: true},
+    year: { type: Number, required: true, min: 1}
+});
+
+const Book = mongoose.model('Book', bookSchema);
+
 // create task table if it doesn't already exist
 const createTable = async() => {
     try{
