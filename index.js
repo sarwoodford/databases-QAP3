@@ -24,6 +24,8 @@ const bookSchema = new mongoose.Scheme({
 
 const Book = mongoose.model('Book', bookSchema);
 
+// postgreSQL ( task 1 )
+
 // create task table if it doesn't already exist
 const createTable = async() => {
     try{
@@ -122,6 +124,26 @@ app.delete('/tasks/:id', async (request, response) => {
 
     
 });
+
+// mongoDB ( task 2 )
+
+const insertBooks = async () => {
+    const bookData = [
+        { title: 'The Hobbit', author: 'JRR Tolkien', genre: 'Fantasy', year: 1937},
+        { title: 'To Kill a Mockingbird', author: 'Harper Lee', genre: 'Fiction', year: 1960},
+        { title: '1984', authoe: 'George Orwell', genre: 'Dystopian', year: 1949}
+    ];
+
+    try{
+        await Book.insertMany(bookData);
+        console.log("Books Inserted Successfully")
+    }
+    catch ( error ){
+        console.log('Error Inserting Books.');
+    }
+}
+
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
