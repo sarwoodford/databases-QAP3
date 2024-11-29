@@ -193,7 +193,63 @@ async function deleteBook(title) {
     }
 }
 
+async function main() {
+    const command = process.argv[2];
+    switch(command) {
 
+        case 'titles' : {
+            await getBookTitles();
+            break;
+        }
+
+        case 'find': {
+            const authorName = process.argv[3];
+
+            if(!authorName) {
+                console.log('Usage: node index.js find <author_name>');
+                break;
+            }
+
+            await findBooksByAuthor(authorName);
+            break;
+        }
+        
+        case 'update': {
+            const title = process.argv[3];
+            const updatedGenre = process.argv[4];
+            
+            if(!title || !updatedGenre) {
+                console.log('Usage: node index.js find <author_name>');
+                break;
+            }
+
+            await updateBookGenre(title, updatedGenre);
+            break;
+        }
+
+        case 'delete': {
+            const title = process.argv[3];
+
+            if(!title) {
+                console.log('Usage: node index.js find <author_name>');
+                break;
+            }
+
+            await deleteBook(title);
+            break;
+        }
+
+        default :
+            console.log('Usage: node index.js <command> [argument(s)]');
+            console.log('Commands: titles, find, update, delete');
+    }
+    mongoose.connection.close();
+}
+
+main().catch((error) => {
+    console.error(error);
+    mongoose.connection.close();
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
