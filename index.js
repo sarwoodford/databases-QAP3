@@ -22,12 +22,18 @@ const createTable = async() => {
         }
 }
 
+
 // let tasks = [
 //     { id: 1, description: 'Buy groceries', status: 'incomplete' },
 //     { id: 2, description: 'Read a book', status: 'complete' },
 // ];
 
 // GET /tasks - Get all tasks
+
+app.get('/', (req, res) => {
+    res.redirect('/tasks');
+});
+
 app.get('/tasks', async(req, res) => {
     try{
         const result = await pool.query('SELECT * FROM tasks');
