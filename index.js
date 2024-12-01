@@ -22,12 +22,15 @@ const createTable = async() => {
         }
 }
 
-// let tasks = [
-//     { id: 1, description: 'Buy groceries', status: 'incomplete' },
-//     { id: 2, description: 'Read a book', status: 'complete' },
-// ];
+createTable()
+
 
 // GET /tasks - Get all tasks
+
+app.get('/', (req, res) => {
+    res.redirect('/tasks');
+});
+
 app.get('/tasks', async(req, res) => {
     try{
         const result = await pool.query('SELECT * FROM tasks');
@@ -43,19 +46,21 @@ app.get('/tasks', async(req, res) => {
 // POST /tasks - Add a new task
 app.post('/tasks', async (request, response) => {
     const { description, status } = request.body; // removed id because the database generates one
+
     if (!description || !status) {
         return response.status(400).json({ error: 'All fields (description, status) are required' });
     }
+
     try{
         const result = await pool.query (
-            'INSERT INTO tasks (description, status) VALUES ($1, $2) RETURNING *'
+            'INSERT INTO tasks (description, status) VALUES ($1, $2) RETURNING *',
             [description, status]
         );
     response.status(201).json({ message: 'Task added successfully' });
     }
     catch(error) {
         console.log(error);
-        response.status(500).send('server error. please retry.')
+        response.status(500).send('server error. please retry.');
     }
     
 });
