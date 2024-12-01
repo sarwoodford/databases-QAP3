@@ -23,7 +23,7 @@ const insertBooks = async () => {
     const bookData = [
         { title: 'The Hobbit', author: 'JRR Tolkien', genre: 'Fantasy', year: 1937},
         { title: 'To Kill a Mockingbird', author: 'Harper Lee', genre: 'Fiction', year: 1960},
-        { title: '1984', authoe: 'George Orwell', genre: 'Dystopian', year: 1949}
+        { title: '1984', author: 'George Orwell', genre: 'Dystopian', year: 1949}
     ];
 
     try{
@@ -49,8 +49,13 @@ async function getBookTitles() {
     }
 }
 
-async function findBooksByAuthor() {
-    const books = await Book.find({ author: authorName });
+async function findBooksByAuthor(authorName) {
+    
+    // general query to find authored items 
+    const books = await Book.find({ author: authorName })
+
+    // specific queriy specified in rubric below
+    //const books = await Book.find({ author: 'JRR Tolkien' });
 
     if(books.length === 0) {
         console.log(`No Books Found By ${authorName}`);
@@ -63,8 +68,13 @@ async function findBooksByAuthor() {
     }
 }
 
-async function updateBookGenre() {
-    const result = await Book.updateOne({ title }, { set: { genre : updatedGenre }});
+async function updateBookGenre(title, updatedGenre) {
+
+    // general query
+    const result = await Book.updateOne({ title: title }, { $set: { genre: updatedGenre }});
+
+    // query specified in rubric below
+    //const result = await Book.updateOne({ title: '1984' }, { $set: { genre : 'Science Fiction' }});
 
     if(result.matchedCount === 0) {
         console.log(`Book Not Found.`);
@@ -75,10 +85,15 @@ async function updateBookGenre() {
 }
 
 async function deleteBook(title) {
-    const result = await Book.deleteOne({ title });
+    
+    // general query
+    const result = await Book.deleteOne({ title: title });
+
+    // query specified in rubric below 
+    //const result = await Book.deleteOne({ title: 'The Hobbit' });
 
     if(result.deletedCount > 0) {
-        console.log(`Book "${result.title}" deleted`)
+        console.log(`Book "${title}" deleted`)
     }
     else{
         console.log(`Book Not Found.`)
@@ -111,7 +126,7 @@ async function main() {
             const updatedGenre = process.argv[4];
             
             if(!title || !updatedGenre) {
-                console.log('Usage: node index.js find <author_name>');
+                console.log('Usage: node index.js update <title> <updatedGenre>');
                 break;
             }
 
@@ -123,7 +138,7 @@ async function main() {
             const title = process.argv[3];
 
             if(!title) {
-                console.log('Usage: node index.js find <author_name>');
+                console.log('Usage: node index.js delete <title>');
                 break;
             }
 
